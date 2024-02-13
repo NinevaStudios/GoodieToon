@@ -5,22 +5,24 @@ Shader "Goodie Toon/Grass"
 {
     Properties
     {
-        [Header(Main)] [Space(10)] _MainTex ("Texture", 2D) = "white" {}
+        [Header(Main)]
+        [Space(10)] [KeywordEnum(Local, World)] _MainTexSpace ("Texture Space", int) = 0
+        _MainTex ("Texture", 2D) = "white" {}
         _Color ("Color", Color) = (1.0, 1.0, 1.0, 1.0)
 
-        [Space(20)] [Header(Shadow)] [Space(10)] _ShadowTex ("Texture", 2D) = "white" {}
+        [Space(10)] [Header(Shadow)]
+        [Space(10)] _ShadowTex ("Texture", 2D) = "white" {}
         _ShadowColor ("Color", Color) = (0.0, 0.0, 0.0, 1.0)
 
         [Space(10)] _Lit ("Lit", float) = 0.5
         _Smooth ("Lit Smooth", float) = 0.5
         _Offset ("Lit Offset", float) = 0.25
 
-        [Space(20)] [Header(Grass)] [Space(10)] _TopColor("Top Color", Color) = (0.65, 0.9, 0.35, 1)
+	    [Space(10)] [Header(Grass)]
+    	[Space(10)] _TopColor("Top Color", Color) = (0.65, 0.9, 0.35, 1)
 		_BottomColor("Bottom Color", Color) = (0.12, 0.5, 0.35, 1)
 
-    	[Space(10)] _RotationMin("Rotation Min", Float) = 0.0
-    	_RotationMax("Rotation Max", Float) = 0.5
-	    _RotationSpeed("Rotation Speed", Float) = 5.0
+	    [Space(10)] _TessellationUniform("Tessellation", Float) = 10
 
 	    [Space(10)] _HeightMin("Height Min", Float) = 0.2
 		_HeightMax("Height Max", Float) = 0.5
@@ -28,7 +30,25 @@ Shader "Goodie Toon/Grass"
     	[Space(10)] _WidthMin("Width Min", Float) = 0.02
 		_WidthMax("Width Max", Float) = 0.05
 
-		[Space(10)] _TessellationUniform("Tessellation", Float) = 10
+        [Space(10)] [Header(Specular)]
+        [Space(10)] [Toggle(SPECULAR)] _Specular ("Specular Enabled", float) = 0
+        _SpecularColor("Color", Color) = (1.0, 1.0, 1.0, 0.05)
+        _SpecularSize("Size", Float) = 0.1
+        _SpecularSmooth("Smooth", Float) = 0.0
+
+        [Space(10)] [Header(Rim)]
+        [Space(10)] [Toggle(RIM)] _Rim ("Rim Enabled", float) = 0
+        _RimColor("Color", Color) = (1.0, 1.0, 1.0, 0.05)
+        _RimSize("Size", float) = 1.0
+        _RimSmooth("Smooth", float) = 1.0
+
+        [Space(10)] [Header(Animations)]
+        [Space(10)] _RotationMin("Grass Rotation Min", Float) = 0.0
+    	_RotationMax("Grass Rotation Max", Float) = 0.5
+	    _RotationSpeed("Grass Rotation Speed", Float) = 5.0
+
+        [Space(10)] [Toggle(MOVING_ANIMATION)] _MovingAnimation ("Moving Enabled", float) = 0
+        _MovingVector ("Moving", Vector) = (0.0, 0.0, 0.0, 0.0)
     }
 
     SubShader
@@ -156,7 +176,7 @@ Shader "Goodie Toon/Grass"
             ENDCG
         }
 
-	    UsePass "Goodie Toon/Base/PASS"
+	    UsePass "Goodie Toon/Default/SURFACE"
     }
 
 	Fallback "VertexLit"
